@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+dist/
+build/
+.next/
+coverage/
+
+# Large media library. Keep these files in the project, but avoid loading them
+# into agent context unless the task explicitly needs media assets.
+assets/
