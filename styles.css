@@ -201,7 +201,7 @@ button:focus-visible {
   white-space: nowrap;
   text-align: center;
   -webkit-text-stroke: 1px rgb(255 255 255 / 0.44);
-  mix-blend-mode: difference;
+  mix-blend-mode: normal;
   filter:
     drop-shadow(0 22px 15px rgb(0 0 0 / 0.45))
     contrast(1.06);
@@ -246,7 +246,7 @@ button:focus-visible {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   opacity: 0.82;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 .hero-metal-title,
@@ -2086,22 +2086,31 @@ button:focus-visible {
 @media (max-width: 760px) {
   .site-header {
     align-items: center;
-    padding-top: 20px;
+    padding: 18px 16px 0;
+    justify-content: center;
   }
 
   .top-nav {
     flex-direction: row;
     align-items: center;
-    max-width: calc(100vw - 116px);
-    gap: 12px;
-    overflow-x: auto;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    gap: 10px;
+    overflow-x: visible;
     padding-bottom: 4px;
-    font-size: 10px;
-    letter-spacing: 0.08em;
+    font-size: 9px;
+    letter-spacing: 0.03em;
+  }
+
+  .brand {
+    display: none;
   }
 
   .poster-hero {
-    width: min(520px, 72vw);
+    width: min(360px, 68vw);
+    min-height: auto;
+    aspect-ratio: 1;
   }
 
   .hero-identity {
@@ -2137,7 +2146,7 @@ button:focus-visible {
   }
 
   .profile-summary-section {
-    grid-template-columns: minmax(136px, 0.33fr) minmax(0, 1fr);
+    grid-template-columns: minmax(104px, 0.28fr) minmax(0, 1fr);
     gap: clamp(24px, 5vw, 42px);
     min-height: auto;
   }
@@ -2155,7 +2164,7 @@ button:focus-visible {
   .visual-strip {
     grid-template-columns: minmax(136px, 0.33fr) minmax(0, 1fr);
     gap: clamp(24px, 5vw, 42px);
-    min-height: 100dvh;
+    min-height: auto;
   }
 
   .project-kicker {
@@ -2177,19 +2186,22 @@ button:focus-visible {
   }
 
   .visual-client {
-    font-size: clamp(12px, 2.1vw, 15px);
+    gap: 8px;
+    justify-items: start;
+    text-align: left;
+    font-size: clamp(11px, 2vw, 13px);
   }
 
   .visual-client img {
-    width: 64px;
+    width: 52px;
   }
 
   .visual-showcase {
-    gap: 24px;
+    gap: 16px;
   }
 
   .visual-copy {
-    gap: 14px;
+    gap: 10px;
   }
 
   .visual-copy h3 {
@@ -2272,14 +2284,20 @@ button:focus-visible {
   }
 
   .profile-heading-row {
-    grid-template-columns: minmax(0, 1fr) clamp(82px, 16vw, 132px);
-    gap: clamp(16px, 3vw, 24px);
+    grid-template-columns: minmax(0, 1fr) clamp(86px, 22vw, 128px);
+    gap: clamp(14px, 3vw, 22px);
+    align-items: center;
   }
 
   .profile-heading-row h2 {
-    font-size: clamp(28px, 5.4vw, 48px);
+    font-size: clamp(24px, 5vw, 40px);
     line-height: 1.08;
     letter-spacing: -0.01em;
+  }
+
+  .profile-avatar {
+    justify-self: end;
+    align-self: center;
   }
 
   .profile-detail-grid {
@@ -2287,7 +2305,7 @@ button:focus-visible {
   }
 
   .profile-body p {
-    font-size: clamp(17px, 2.85vw, 24px);
+    font-size: clamp(15px, 2.45vw, 20px);
     line-height: 1.48;
   }
 
@@ -2301,6 +2319,43 @@ button:focus-visible {
     grid-template-columns: 1fr;
     gap: 2px;
     padding: 10px 0;
+  }
+
+  .workflow-section {
+    padding-top: 54px;
+    padding-bottom: 54px;
+  }
+
+  .workflow-grid {
+    gap: 14px;
+    width: min(100%, 640px);
+  }
+
+  .workflow-card {
+    aspect-ratio: 1 / 0.9;
+  }
+
+  .workflow-card-toggle {
+    gap: 10px;
+    padding: 18px;
+  }
+
+  .workflow-number {
+    font-size: clamp(24px, 5vw, 34px);
+  }
+
+  .workflow-title {
+    font-size: clamp(17px, 3.4vw, 22px);
+  }
+
+  .workflow-summary,
+  .workflow-output {
+    font-size: clamp(11px, 2.2vw, 13px);
+  }
+
+  .workflow-detail {
+    margin: 0 18px 18px;
+    font-size: clamp(10px, 2vw, 12px);
   }
 
   .video-row,
@@ -2343,16 +2398,18 @@ button:focus-visible {
   .top-nav {
     flex-direction: row;
     align-items: center;
-    gap: 12px;
-    overflow-x: auto;
+    justify-content: center;
+    width: 100%;
+    gap: 9px;
+    overflow-x: visible;
     padding-bottom: 4px;
-    font-size: 11px;
-    letter-spacing: 0.1em;
+    font-size: 10px;
+    letter-spacing: 0.04em;
   }
 
   .offgrid-hero {
-    min-height: calc(100dvh - 94px);
-    padding: 28px 18px 44px;
+    min-height: 68dvh;
+    padding: 22px 18px 38px;
   }
 
   .hero-identity {
@@ -2363,25 +2420,44 @@ button:focus-visible {
   }
 
   .poster-hero {
-    width: min(440px, 90vw);
-    min-height: 58dvh;
+    width: min(300px, 72vw);
+    height: min(300px, 72vw);
+    min-height: 0;
+    aspect-ratio: 1;
     transform: rotate(-1.4deg);
   }
 
   .poster-hero img {
-    height: 58dvh;
+    height: 100%;
   }
 
-  .poster-hero figcaption {
+  .poster-hero figcaption,
+  .poster-bottom-labels {
     font-size: 9px;
     letter-spacing: 0.08em;
   }
 
   .hero-metal-title {
-    font-size: clamp(54px, 16vw, 82px);
+    font-size: clamp(56px, 16.5vw, 68px);
     line-height: 0.84;
     letter-spacing: -0.09em;
-    transform: translate(-50%, -50%) scaleX(1.02);
+    left: 50vw;
+    top: 50%;
+    color: #f8f8f2;
+    -webkit-text-stroke: 0;
+    mix-blend-mode: normal;
+    filter: drop-shadow(0 16px 12px rgb(0 0 0 / 0.58));
+    text-shadow:
+      0 1px 0 #ffffff,
+      1px 2px 0 #d8d8d2,
+      2px 3px 0 #9e9e98,
+      4px 6px 0 #333333,
+      9px 12px 14px rgb(0 0 0 / 0.66);
+    transform: translateY(-50%) scaleX(1.08);
+  }
+
+  .hero-metal-title::after {
+    display: none;
   }
 
   .poster-ghost {
@@ -2407,7 +2483,8 @@ button:focus-visible {
   }
 
   .video-feature-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
   .video-feature-main h3 {
@@ -2426,7 +2503,7 @@ button:focus-visible {
   }
 
   .feature-video {
-    height: clamp(260px, 58vh, 500px);
+    height: clamp(180px, 42vw, 260px);
   }
 
   .youth-video-main {
@@ -2490,6 +2567,15 @@ button:focus-visible {
     column-count: 1;
   }
 
+  .visual-strip:not(#visual-feature):not(#video-feature) .visual-kicker h2 {
+    display: none;
+  }
+
+  #sco-feature .visual-client,
+  #haihe-feature .visual-client {
+    display: none;
+  }
+
   .site-footer {
     display: grid;
     padding-left: 18px;
@@ -2541,24 +2627,42 @@ button:focus-visible {
 
   .visual-strip {
     grid-template-columns: 1fr;
+    padding-top: 42px;
+    padding-bottom: 38px;
   }
 
   .project-kicker,
   .visual-kicker {
     border-right: 0;
-    border-bottom: 1px solid rgb(255 255 255 / 0.24);
+    border-bottom: 0;
     padding-right: 0;
-    padding-bottom: 28px;
+    padding-bottom: 12px;
+  }
+
+  #sco-feature .visual-client,
+  #haihe-feature .visual-client,
+  #spring-feature .visual-client {
+    display: none !important;
+  }
+
+  .visual-strip:not(#visual-feature) .visual-copy {
+    border-top: 0;
+    padding-top: 0;
   }
 
   .workflow-grid {
     grid-column: auto;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-areas: none;
+    gap: 12px;
   }
 
   .workflow-card-toggle {
     min-height: 0;
+  }
+
+  .workflow-card {
+    aspect-ratio: 1 / 1.02;
   }
 
   .poster-rail {
@@ -2609,11 +2713,11 @@ button:focus-visible {
   }
 
   .profile-heading-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) min(28vw, 112px);
   }
 
   .profile-avatar {
-    width: min(48vw, 180px);
-    justify-self: start;
+    width: 100%;
+    justify-self: end;
   }
 }
