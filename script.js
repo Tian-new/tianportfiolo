@@ -21,6 +21,8 @@ const assets = {
   contactQr: "assets/visuals/contact-qr.jpg",
 };
 
+const videoPosterCache = new Map();
+
 const visualWorks = [
   { title: "天津文旅 立春", meta: "城市品牌传播", category: "品牌传播", image: assets.tianjinLichun },
   { title: "天津文旅 夏至", meta: "文旅推广视觉", category: "品牌传播", image: assets.tianjinXiazhi },
@@ -470,7 +472,7 @@ function videoSlideCards(items) {
     .map(
       (item, index) => `
         <article class="video-slide" id="study-video-${index + 1}">
-          <video class="feature-video" controls preload="metadata" playsinline src="${item.src}"></video>
+          <video class="feature-video" controls preload="auto" playsinline data-video-autoposter src="${item.src}"></video>
           <h4>${item.title}</h4>
         </article>
       `
@@ -483,7 +485,7 @@ function youthVideoCards(items) {
     .map(
       (item, index) => `
         <article class="youth-video-card" data-youth-card>
-          <video class="youth-video" controls preload="metadata" playsinline src="${item.src}"></video>
+          <video class="youth-video" controls preload="auto" playsinline data-video-autoposter src="${item.src}"></video>
           <h4>${item.title}</h4>
         </article>
       `
@@ -1158,6 +1160,67 @@ function initAutoPauseVideos() {
   });
 }
 
+function initVideoPosters() {
+  const videos = Array.from(document.querySelectorAll("video[data-video-autoposter]"));
+  if (!videos.length) return;
+
+  const applyPoster = (src, poster) => {
+    document.querySelectorAll(`video[data-video-autoposter][src="${src}"]`).forEach((video) => {
+      if (!video.getAttribute("poster")) video.setAttribute("poster", poster);
+    });
+  };
+
+  const capturePoster = (src) => {
+    if (videoPosterCache.has(src)) {
+      applyPoster(src, videoPosterCache.get(src));
+      return;
+    }
+
+    const preview = document.createElement("video");
+    preview.muted = true;
+    preview.playsInline = true;
+    preview.preload = "auto";
+    preview.src = src;
+
+    const drawFrame = () => {
+      if (!preview.videoWidth || !preview.videoHeight) return;
+      const canvas = document.createElement("canvas");
+      canvas.width = preview.videoWidth;
+      canvas.height = preview.videoHeight;
+      const context = canvas.getContext("2d");
+      if (!context) return;
+      try {
+        context.drawImage(preview, 0, 0, canvas.width, canvas.height);
+        const poster = canvas.toDataURL("image/jpeg", 0.82);
+        videoPosterCache.set(src, poster);
+        applyPoster(src, poster);
+      } catch {
+        // Some browsers block frame capture for specific media; keep native video preview in that case.
+      } finally {
+        preview.removeAttribute("src");
+        preview.load();
+      }
+    };
+
+    preview.addEventListener("loadedmetadata", () => {
+      const targetTime = Math.min(0.24, Math.max(0, (preview.duration || 1) - 0.05));
+      try {
+        if (targetTime > 0) preview.currentTime = targetTime;
+        else drawFrame();
+      } catch {
+        drawFrame();
+      }
+    }, { once: true });
+    preview.addEventListener("seeked", drawFrame, { once: true });
+    preview.addEventListener("loadeddata", () => {
+      if (!preview.currentTime) drawFrame();
+    }, { once: true });
+    preview.load();
+  };
+
+  [...new Set(videos.map((video) => video.getAttribute("src")).filter(Boolean))].forEach(capturePoster);
+}
+
 function initGsapAnimations() {
   if (!window.gsap || !window.ScrollTrigger) return;
 
@@ -1383,6 +1446,7 @@ function render() {
   initWorkflowCards();
   initPosterRail();
   initInertiaCarousel();
+  initVideoPosters();
   initVideoCarousel();
   initYouthVideoCarousel();
   initAutoPauseVideos();

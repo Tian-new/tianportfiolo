@@ -2438,7 +2438,7 @@ button:focus-visible {
   }
 
   .hero-metal-title {
-    font-size: clamp(56px, 16.5vw, 68px);
+    font-size: clamp(62px, 20vw, 96px);
     line-height: 0.84;
     letter-spacing: -0.09em;
     left: 50vw;
@@ -2627,8 +2627,8 @@ button:focus-visible {
 
   .visual-strip {
     grid-template-columns: 1fr;
-    padding-top: 42px;
-    padding-bottom: 38px;
+    padding-top: 28px;
+    padding-bottom: 32px;
   }
 
   .project-kicker,
@@ -2636,7 +2636,7 @@ button:focus-visible {
     border-right: 0;
     border-bottom: 0;
     padding-right: 0;
-    padding-bottom: 12px;
+    padding-bottom: 6px;
   }
 
   #sco-feature .visual-client,
@@ -2645,7 +2645,13 @@ button:focus-visible {
     display: none !important;
   }
 
-  .visual-strip:not(#visual-feature) .visual-copy {
+  .visual-copy {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .video-feature-main,
+  .youth-video-main {
     border-top: 0;
     padding-top: 0;
   }
