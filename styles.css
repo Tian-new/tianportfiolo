@@ -2167,6 +2167,12 @@ button:focus-visible {
     min-height: auto;
   }
 
+  .visual-strip,
+  .video-feature,
+  .youth-video-section {
+    min-height: auto !important;
+  }
+
   .project-kicker {
     padding-right: clamp(14px, 3vw, 24px);
   }
@@ -2202,6 +2208,13 @@ button:focus-visible {
 
   .visual-copy {
     gap: 10px;
+  }
+
+  .poster-series .visual-showcase,
+  .visual-showcase,
+  .video-feature-main,
+  .youth-video-main {
+    gap: 14px;
   }
 
   .visual-copy h3 {
@@ -2438,7 +2451,7 @@ button:focus-visible {
   }
 
   .hero-metal-title {
-    font-size: clamp(62px, 20vw, 96px);
+    font-size: clamp(76px, 24vw, 108px);
     line-height: 0.84;
     letter-spacing: -0.09em;
     left: 50vw;
@@ -2627,22 +2640,44 @@ button:focus-visible {
 
   .visual-strip {
     grid-template-columns: 1fr;
-    padding-top: 28px;
-    padding-bottom: 32px;
+    gap: 12px;
+    min-height: auto !important;
+    padding-top: 18px;
+    padding-bottom: 28px;
   }
 
   .project-kicker,
   .visual-kicker {
+    min-height: 0;
+    align-content: start;
+    gap: 8px;
     border-right: 0;
     border-bottom: 0;
     padding-right: 0;
-    padding-bottom: 6px;
+    padding-bottom: 0;
   }
 
   #sco-feature .visual-client,
   #haihe-feature .visual-client,
   #spring-feature .visual-client {
     display: none !important;
+  }
+
+  #sco-feature .visual-kicker,
+  #haihe-feature .visual-kicker,
+  #spring-feature .visual-kicker {
+    display: none !important;
+  }
+
+  .visual-client {
+    margin: 0 !important;
+    gap: 6px;
+    font-size: 11px;
+    line-height: 1.18;
+  }
+
+  .visual-client img {
+    width: 44px;
   }
 
   .visual-copy {
@@ -2653,6 +2688,7 @@ button:focus-visible {
   .video-feature-main,
   .youth-video-main {
     border-top: 0;
+    gap: 14px;
     padding-top: 0;
   }
 

@@ -21,8 +21,6 @@ const assets = {
   contactQr: "assets/visuals/contact-qr.jpg",
 };
 
-const videoPosterCache = new Map();
-
 const visualWorks = [
   { title: "天津文旅 立春", meta: "城市品牌传播", category: "品牌传播", image: assets.tianjinLichun },
   { title: "天津文旅 夏至", meta: "文旅推广视觉", category: "品牌传播", image: assets.tianjinXiazhi },
@@ -126,27 +124,31 @@ const videoWarmupItems = [
   {
     title: "“验证码”互动小游戏",
     src: "assets/videos/study-china-warmup/verification-game.mp4",
+    poster: "assets/videos/posters/verification-game.jpg",
   },
   {
     title: "城市截图挑战",
     src: "assets/videos/study-china-warmup/city-screenshot-challenge.mp4",
+    poster: "assets/videos/posters/city-screenshot-challenge.jpg",
   },
   {
     title: "校训",
     src: "assets/videos/study-china-warmup/school-motto.mp4",
+    poster: "assets/videos/posters/school-motto.jpg",
   },
   {
     title: "一起来找茬",
     src: "assets/videos/study-china-warmup/spot-the-difference.mp4",
+    poster: "assets/videos/posters/spot-the-difference.jpg",
   },
 ];
 
 const chineseYouthVideos = [
-  { title: "传承", src: "assets/videos/chinese-youth/heritage.mp4" },
-  { title: "爱国", src: "assets/videos/chinese-youth/patriotism.mp4" },
-  { title: "绿色生态", src: "assets/videos/chinese-youth/green-ecology.mp4" },
-  { title: "创新", src: "assets/videos/chinese-youth/innovation.mp4" },
-  { title: "奋进", src: "assets/videos/chinese-youth/strive.mp4" },
+  { title: "传承", src: "assets/videos/chinese-youth/heritage.mp4", poster: "assets/videos/posters/heritage.jpg" },
+  { title: "爱国", src: "assets/videos/chinese-youth/patriotism.mp4", poster: "assets/videos/posters/patriotism.jpg" },
+  { title: "绿色生态", src: "assets/videos/chinese-youth/green-ecology.mp4", poster: "assets/videos/posters/green-ecology.jpg" },
+  { title: "创新", src: "assets/videos/chinese-youth/innovation.mp4", poster: "assets/videos/posters/innovation.jpg" },
+  { title: "奋进", src: "assets/videos/chinese-youth/strive.mp4", poster: "assets/videos/posters/strive.jpg" },
 ];
 
 const workflowSteps = [
@@ -472,7 +474,7 @@ function videoSlideCards(items) {
     .map(
       (item, index) => `
         <article class="video-slide" id="study-video-${index + 1}">
-          <video class="feature-video" controls preload="auto" playsinline data-video-autoposter src="${item.src}"></video>
+          <video class="feature-video" controls preload="metadata" playsinline poster="${item.poster}" src="${item.src}"></video>
           <h4>${item.title}</h4>
         </article>
       `
@@ -485,7 +487,7 @@ function youthVideoCards(items) {
     .map(
       (item, index) => `
         <article class="youth-video-card" data-youth-card>
-          <video class="youth-video" controls preload="auto" playsinline data-video-autoposter src="${item.src}"></video>
+          <video class="youth-video" controls preload="metadata" playsinline poster="${item.poster}" src="${item.src}"></video>
           <h4>${item.title}</h4>
         </article>
       `
@@ -1160,67 +1162,6 @@ function initAutoPauseVideos() {
   });
 }
 
-function initVideoPosters() {
-  const videos = Array.from(document.querySelectorAll("video[data-video-autoposter]"));
-  if (!videos.length) return;
-
-  const applyPoster = (src, poster) => {
-    document.querySelectorAll(`video[data-video-autoposter][src="${src}"]`).forEach((video) => {
-      if (!video.getAttribute("poster")) video.setAttribute("poster", poster);
-    });
-  };
-
-  const capturePoster = (src) => {
-    if (videoPosterCache.has(src)) {
-      applyPoster(src, videoPosterCache.get(src));
-      return;
-    }
-
-    const preview = document.createElement("video");
-    preview.muted = true;
-    preview.playsInline = true;
-    preview.preload = "auto";
-    preview.src = src;
-
-    const drawFrame = () => {
-      if (!preview.videoWidth || !preview.videoHeight) return;
-      const canvas = document.createElement("canvas");
-      canvas.width = preview.videoWidth;
-      canvas.height = preview.videoHeight;
-      const context = canvas.getContext("2d");
-      if (!context) return;
-      try {
-        context.drawImage(preview, 0, 0, canvas.width, canvas.height);
-        const poster = canvas.toDataURL("image/jpeg", 0.82);
-        videoPosterCache.set(src, poster);
-        applyPoster(src, poster);
-      } catch {
-        // Some browsers block frame capture for specific media; keep native video preview in that case.
-      } finally {
-        preview.removeAttribute("src");
-        preview.load();
-      }
-    };
-
-    preview.addEventListener("loadedmetadata", () => {
-      const targetTime = Math.min(0.24, Math.max(0, (preview.duration || 1) - 0.05));
-      try {
-        if (targetTime > 0) preview.currentTime = targetTime;
-        else drawFrame();
-      } catch {
-        drawFrame();
-      }
-    }, { once: true });
-    preview.addEventListener("seeked", drawFrame, { once: true });
-    preview.addEventListener("loadeddata", () => {
-      if (!preview.currentTime) drawFrame();
-    }, { once: true });
-    preview.load();
-  };
-
-  [...new Set(videos.map((video) => video.getAttribute("src")).filter(Boolean))].forEach(capturePoster);
-}
-
 function initGsapAnimations() {
   if (!window.gsap || !window.ScrollTrigger) return;
 
@@ -1233,6 +1174,7 @@ function initGsapAnimations() {
     gsap.set("[data-motion], .hero-metal-title", { clearProps: "all" });
     return;
   }
+  const isPhone = window.matchMedia("(max-width: 520px)").matches;
 
   gsap.defaults({ ease: "expo.out", duration: 0.9 });
 
@@ -1321,7 +1263,7 @@ function initGsapAnimations() {
       ".page-title",
       ".detail-title",
     ].join(", "),
-    { y: 76, scale: 0.985, duration: 1.18, stagger: 0.045, ease: "expo.out", batchMax: 3 }
+    { y: isPhone ? 24 : 76, scale: 0.985, duration: 1.18, stagger: 0.045, ease: "expo.out", batchMax: 3 }
   );
 
   animateBatch(
@@ -1335,7 +1277,7 @@ function initGsapAnimations() {
       ".article-row h3",
       ".detail-section h2",
     ].join(", "),
-    { y: 42, scale: 0.99, duration: 0.96, stagger: 0.055, ease: "power4.out", batchMax: 4 }
+    { y: isPhone ? 12 : 42, scale: 0.99, duration: 0.96, stagger: 0.055, ease: "power4.out", batchMax: 4 }
   );
 
   animateBatch(
@@ -1353,7 +1295,7 @@ function initGsapAnimations() {
       ".detail-section p",
       ".detail-section li",
     ].join(", "),
-    { y: 24, duration: 0.78, stagger: 0.035, start: "top 90%", ease: "power3.out", batchMax: 8 }
+    { y: isPhone ? 10 : 24, duration: 0.78, stagger: 0.035, start: "top 90%", ease: "power3.out", batchMax: 8 }
   );
 
   animateBatch(
@@ -1363,7 +1305,7 @@ function initGsapAnimations() {
       ".index-project em",
       ".visual-client span",
     ].join(", "),
-    { y: 30, duration: 0.82, stagger: 0.055, start: "top 88%", ease: "power3.out", batchMax: 5 }
+    { y: isPhone ? 10 : 30, duration: 0.82, stagger: 0.055, start: "top 88%", ease: "power3.out", batchMax: 5 }
   );
 
   ScrollTrigger.refresh();
@@ -1446,7 +1388,6 @@ function render() {
   initWorkflowCards();
   initPosterRail();
   initInertiaCarousel();
-  initVideoPosters();
   initVideoCarousel();
   initYouthVideoCarousel();
   initAutoPauseVideos();
